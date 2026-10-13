@@ -29,6 +29,7 @@
 | **Read** `artifact_language` | every artifact-writing skill | the prose language of pipeline documents → [`artifact-language.md`](./artifact-language.md) |
 | **Read** `judgment_model` / `model_<role>` / `effort_<role>` | every skill that dispatches an agent | the tier each agent runs at → [`agent-roster.md`](./agent-roster.md) |
 | **Read** the engine keys (`tdd`, `team_mode`, `workflow_mode`, `max_parallel_agents`, `isolation`, `stop_on_red`, `max_red_retries`, `gate_*`, `require_integration`, `auto_commit`, `branch_strategy`, `cmd_*`) | `implement` (`cmd_*` + gates also `fix`) | → [`../implement/references/settings.md`](../implement/references/settings.md) |
+| **Read** `auto_commit` | every skill that writes a document | `off` → no commits, the handoff prints the commands → [`write-and-commit.md`](./write-and-commit.md) |
 
 ## Create when absent (the procedure)
 
@@ -53,7 +54,7 @@ is strictly better than a stage that discovers it is missing three commands late
    Codex CLI, `sdd-config` from Cursor's `/` menu) → [`tool-adapters.md`](./tool-adapters.md).
 
 The settings file itself is **never committed** (it's gitignored). The `.gitignore` patch is, and
-rides along in whatever commit the stage proposes.
+rides along in the stage's first commit ([`write-and-commit.md`](./write-and-commit.md)).
 
 ## The documented frontmatter
 
@@ -73,7 +74,7 @@ max_red_retries: 3         # integer ≥1 — RED→GREEN attempts before escala
 gate_lint: true            # true | false — include lint in the per-task gate
 gate_vet: true             # true | false — include vet / static-analysis in the per-task gate
 require_integration: auto  # auto | always | never (Docker-probed)
-auto_commit: per_task      # per_task | per_phase | off
+auto_commit: per_task      # per_task | per_phase | off — off also stops document-stage commits
 branch_strategy: feature   # feature | current
 cmd_test_unit: ""          # empty = autodetect (escape hatch)
 cmd_test_integration: ""
@@ -100,7 +101,7 @@ effort_reviewer: high
 - **`max_red_retries`** — RED→GREEN attempts before escalation.
 - **`gate_lint` / `gate_vet`** — include lint / vet in the per-task gate (skipped gracefully if no command is detected).
 - **`require_integration`** — `auto`: run integration tests if a Docker daemon answers, else mark NON-red; `always`: BLOCK before dispatch if Docker is absent; `never`: skip the integration tier entirely.
-- **`auto_commit`** — `per_task` (default), `per_phase`, or `off` (leave commits to the user).
+- **`auto_commit`** — `per_task` (default), `per_phase`, or `off` (leave commits to the user). Read by **every stage**: document stages commit one commit per document at the end of the step on `per_task` / `per_phase` and only print the commands on `off` (→ `skills/_shared/write-and-commit.md`); in `implement`, `per_task` commits each task, `per_phase` batches per dependency layer.
 - **`branch_strategy`** — `feature`: ensure work is on a feature branch (create one if on the default branch); `current`: commit on the current branch.
 - **`cmd_*`** — explicit command overrides; non-empty values short-circuit detection (the escape hatch for unusual repos). **Empty is the better default** — the detection cascade reads the repo's own Makefile / package scripts / language manifests, so a pinned command is one more thing to keep in sync.
 - **`model_*` / `effort_*`** — per-role model + effort for the three execution agents, applied when the engine spawns them (it overrides the agent's frontmatter default). Roster defaults + rationale → `skills/_shared/agent-roster.md`.

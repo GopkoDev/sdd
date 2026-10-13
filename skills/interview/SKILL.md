@@ -71,6 +71,12 @@ Never turn a hypothetical failure signal into an observed incident. Keep sources
    or research. Unknown requiring new observations → name an experiment/data source. Prioritize
    answers that can change direction, scope, or whether to proceed. Probe concrete problems,
    affected actors, observable outcomes, constraints, non-goals, and existing workarounds.
+   **Write as you go** ([`../_shared/write-and-commit.md`](../_shared/write-and-commit.md)): when the
+   gates allow writes, after the **first real owner answer** copy
+   [`templates/idea-brief.md`](templates/idea-brief.md) to `docs/idea-brief.md` (§1 = raw words,
+   `status: Draft`), then write each section as soon as its content settles. Same-idea existing
+   brief → patch the changed section in place; a different or uncertain idea is never written
+   over before the owner says how it relates. No-write mode → the gates above win, nothing lands.
 3. **Check decision-changing facts.** Follow [`references/research.md`](references/research.md):
    local evidence first, primary external sources when needed; use `sdd:researcher` in explicit
    `fact-check` mode for a bounded gap. Inspect its evidence before relying on it. Return to step 2
@@ -94,9 +100,10 @@ Never turn a hypothetical failure signal into an observed incident. Keep sources
    eight headings and exactly four frontmatter keys; `depth` is the resolved ceiling, `status`
    stays `Draft` (readiness is in §7). **Ensure the settings file** at this write point using
    [`../_shared/settings-file.md`](../_shared/settings-file.md): create if absent, never overwrite
-   values; only `config` changes settings. Then write the brief, run the checks below, and propose
-   commit `interview: idea brief for <slug>`. Outside a repo / in Plan Mode, return the brief in
-   the conversation, without settings, file writes, or a commit. Emit the utility stage-handoff block
+   values; only `config` changes settings. Then finish the sections not yet on disk, run the checks below, and only after they pass
+   commit per [`../_shared/write-and-commit.md`](../_shared/write-and-commit.md): one commit
+   `interview: <slug> idea-brief.md` (the `.gitignore` patch rides in it). Outside a repo / in
+   Plan Mode, return the brief in the conversation, without settings, file writes, or a commit. Emit the utility stage-handoff block
    per [`../_shared/handoff.md`](../_shared/handoff.md): **What I did**, **Review**, **Run next**.
 
 ## Verification and Definition of Done

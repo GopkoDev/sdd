@@ -72,10 +72,13 @@ built screens against this manifest.
    manifest. **Degrade, don't block**: the tool's MCP unavailable in this session → fall back to
    `code` mode and name the degradation in the manifest §Source + the handoff
    (→ [`../_shared/tool-adapters.md`](../_shared/tool-adapters.md)).
-4. **Write the manifest + commit.** Fill [`./templates/screens.md`](./templates/screens.md) →
-   `docs/features/<slug>/screens.md` (frontmatter `tool` copied from the canon; §Source; one
-   `### SCR-NN` section per screen; §New components). Stamp `updated_at`; propose commit
-   `screens: <slug> manifest`.
+4. **Write the manifest per screen.** At the first screen, bootstrap
+   [`./templates/screens.md`](./templates/screens.md) → `docs/features/<slug>/screens.md`
+   (frontmatter `tool` copied from the canon; §Source). Steps 2–3 run screen by screen; write each
+   `### SCR-NN` section (and any §New components rows it adds) **as soon as that screen is
+   confirmed and drawn** — progressive writes per
+   [`../_shared/write-and-commit.md`](../_shared/write-and-commit.md). Stamp `updated_at` after the
+   last screen. No commit yet — it follows the self-check.
 5. **Structural self-check** — per [`../_shared/self-check.md`](../_shared/self-check.md): re-read
    the manifest from disk and verify **4 items**: (1) every `SCR-NN` from `ux-flows.md` has a
    section (inventory fully covered — or the noted-gap fallback is stated); (2) every screen shows
@@ -83,8 +86,14 @@ built screens against this manifest.
    component name exists in the design-system inventory or sits in §New components with a
    justification; (4) for `figma`/`pencil`, every state row carries a source-ref (node-id) — for
    `code`, the wireframes are present. Fix + re-check ≤2 cycles; surface anything unresolved.
-6. **Handoff.** Emit the **stage-handoff block** per [`../_shared/handoff.md`](../_shared/handoff.md)
-   — *What I did* (tool used or the degradation, «self-check: 4/4 pass») + *Review*
+6. **Commit + handoff.** On a passing self-check, **commit per
+   [`../_shared/write-and-commit.md`](../_shared/write-and-commit.md)** — one commit for
+   `screens.md` (`screens: <slug> screens.md`) and, on `pencil`, one for `screens.pen`
+   (`screens: <slug> screens.pen`) only when `git status` shows it changed (the Pencil app persists
+   only on the user's Cmd+S — an unsaved `.pen` is named in the handoff, not committed); Figma lives
+   outside the repo, nothing to commit. An unresolved item means no commits. Then emit the
+   **stage-handoff block** per [`../_shared/handoff.md`](../_shared/handoff.md)
+   — *What I did* (tool used or the degradation, «self-check: 4/4 pass», the commit SHAs) + *Review*
    (`docs/features/<slug>/screens.md`, + `screens.pen` / the Figma file when tool-drawn) + *Run
    next*: `/clear`, then `/sdd:tasks <slug>` (each `ui` task will cite these SCR ids + states).
 

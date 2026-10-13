@@ -12,7 +12,8 @@ description: >
   Triage is three-way: AC exists and is violated (regression) / AC is ambiguous (spec-bug —
   patch the wording) / no AC covers it (gap — add one, marked added-by-fix). Works on a repo
   with no specs at all (soft mode — code-first, recommends survey after). Writes a fix record
-  under docs/features/{slug}/_fixes/ and commits with an SDD-Fix trailer.
+  under docs/features/{slug}/_fixes/ and commits the fix (SDD-Fix trailer), the record and any
+  spec patch as separate commits.
 ---
 
 # Skill: fix
@@ -47,7 +48,7 @@ No depth dial and no `.size` here — a fix is one size, and the interview is th
 3. **RED — pin the bug with a failing test.** Write the **minimal** test that reproduces the bug at the level the behaviour implies (unit for a rule, integration for a dependency behaviour, e2e for a flow). Run it and classify the first run per [`../implement/references/tdd-loop.md`](../implement/references/tdd-loop.md) — it must be a **GOOD red** (fails on the assertion that encodes the *expected* behaviour); quote the failing line. A bug that can't be pinned by a test → STOP and say so — an unverifiable fix is a guess.
 4. **GREEN + GATE — minimal fix.** Make the RED test pass with the smallest change; **no drive-by refactors** (anything the fix exposes goes to the record's follow-ups). Then the same per-task gate `implement` runs: unit + lint + vet (+ integration when available), via the detected commands (detection cascade → [`../implement/references/command-detection.md`](../implement/references/command-detection.md)). Red gate → fix it, never commit around it.
 5. **Spec patch + fix record.** Apply the step-2 branch — (a) nothing to patch, re-verify the AC; (b) patch the AC wording; (c) add the new AC with the marker. **Any spec change is confirmed with the user** in one `AskUserQuestion` (before/after wording shown). Then write `docs/features/<slug>/_fixes/<date>-<short-slug>.md` from [`./templates/fix-record.md`](./templates/fix-record.md): symptom → root cause → the pinning test → the spec patch (or why there is none).
-6. **Commit + handoff.** Propose commit `fix: <slug> <short summary>` with trailers `SDD-Fix: <date>-<short-slug>` and `SDD-AC: <id>` (when an AC was traced). Then **emit the stage-handoff block** per [`../_shared/handoff.md`](../_shared/handoff.md) (utility variant — `/clear` optional): *What I did* + *Review* (the diff, `_fixes/<date>-<short-slug>.md`, the spec patch if any) + *Run next*: resume what you were doing; **when the fix touched >5 files or crossed a module boundary, recommend `/sdd:review <slug>`** — a recommendation, not a gate.
+6. **Commit + handoff.** With the GATE green (this skill's structural self-check), commit per [`../_shared/write-and-commit.md`](../_shared/write-and-commit.md) — separate commits: the code fix + its pinning test as `fix: <slug> <short summary>` with trailers `SDD-Fix: <date>-<short-slug>` and `SDD-AC: <id>` (when an AC was traced); the record as `fix: <slug> record <date>-<short-slug>`; the spec patch (if any) as `fix: <slug> spec.md <AC id>`. A red gate → no commits. Then **emit the stage-handoff block** per [`../_shared/handoff.md`](../_shared/handoff.md) (utility variant — `/clear` optional): *What I did* (incl. the commits with short SHAs) + *Review* (the diff, `_fixes/<date>-<short-slug>.md`, the spec patch if any) + *Run next*: resume what you were doing; **when the fix touched >5 files or crossed a module boundary, recommend `/sdd:review <slug>`** — a recommendation, not a gate.
 
 ## Definition of Done
 

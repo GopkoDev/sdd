@@ -55,7 +55,7 @@ Whoever drives the conversation — anyone who spots ambiguity. Tech Lead approv
 8. **Append under `## Glossary`.** Read the file, insert the line in `## Glossary` (alphabetical if the section is already sorted, else at the end). Never rewrite existing entries.
 9. **Prune empty H2s.** On a fresh bootstrap, delete `## Invariants` / `## Out of scope` if they hold no real content — only `## Glossary` is mandatory. (A genuine invariant or out-of-scope note goes in its section, never as implementation detail.)
 10. **Structural self-check** — per [`../_shared/self-check.md`](../_shared/self-check.md): re-read the target file(s) from disk and verify **3 items**: (1) the term appears **exactly once across both levels combined** (grep root `CONTEXT.md` + `docs/features/<slug>/CONTEXT.md` — no duplicate, no split); (2) the entry matches the format `- <term> — <definition>.` (with the optional `NOT …` tail); (3) no empty H2 sections remain. Fix + re-check ≤2 cycles; surface anything unresolved.
-11. **Stamp + commit + handoff.** Set `updated_at: <today>` in the frontmatter. Propose `context: + <term>` (or `context: + <term>, <term2>` for a batch). May fold into the caller's intake/spec commit. Then **emit the stage-handoff block** per [`../_shared/handoff.md`](../_shared/handoff.md) (utility variant) — *What I did* (incl. «self-check: 3/3 pass») + *Review* (`CONTEXT.md`) + *Run next*: resume your backbone stage (e.g. `/sdd:design <slug>`); `/clear` optional.
+11. **Stamp + commit + handoff.** Set `updated_at: <today>` in the frontmatter (before the step-10 re-read). Commit per [`../_shared/write-and-commit.md`](../_shared/write-and-commit.md) — after the self-check, one commit per changed `CONTEXT.md`: `glossary: <slug> CONTEXT.md + <term>` (repo-root file: `glossary: CONTEXT.md + <term>`; a batch lists the terms). Invoked in-flow by `specify` / `clarify` → don't commit here; the caller commits `CONTEXT.md` as its own document at the end of its step. Then **emit the stage-handoff block** per [`../_shared/handoff.md`](../_shared/handoff.md) (utility variant) — *What I did* (incl. «self-check: 3/3 pass») + *Review* (`CONTEXT.md`) + *Run next*: resume your backbone stage (e.g. `/sdd:design <slug>`); `/clear` optional.
 
 ## Definition of Done
 
@@ -63,7 +63,7 @@ Whoever drives the conversation — anyone who spots ambiguity. Tech Lead approv
 - Any conflict with an existing entry is resolved (reported as duplicate, or disambiguated into distinct names).
 - Generic tech words are refused, not stored.
 - Empty H2 sections are pruned on bootstrap; `## Glossary` remains.
-- `updated_at` reflects today; a commit is proposed.
+- `updated_at` reflects today; standalone run → each changed `CONTEXT.md` committed after the self-check (in-flow call → the caller commits it).
 
 ## Anti-patterns
 

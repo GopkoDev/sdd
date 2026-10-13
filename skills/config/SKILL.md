@@ -90,10 +90,10 @@ Whoever owns the repo's setup — usually the lead who runs the pipeline first, 
    none dropped, including unknown ones; (4) every inline comment that was there is still there;
    (5) `.gitignore` contains `.claude/*.local.md` and `.worktrees/`, each exactly once; (6) no file
    outside `.claude/sdd.local.md` + `.gitignore` was modified (`git status --short`). Fix + re-check
-   ≤2 cycles; surface anything unresolved. Then propose commit `chore: gitignore sdd settings`
-   **only if `.gitignore` actually changed** — the settings file is gitignored and has nothing to
-   commit. Then **emit the stage-handoff block** per [`../_shared/handoff.md`](../_shared/handoff.md)
-   — *What I did* (the changed keys + the self-check line) + *Review* (`.claude/sdd.local.md`) +
+   ≤2 cycles; surface anything unresolved. Then commit per [`../_shared/write-and-commit.md`](../_shared/write-and-commit.md):
+   one commit `config: .gitignore sdd settings` **only if `.gitignore` actually changed** — the
+   settings file is gitignored and has nothing to commit. Then **emit the stage-handoff block** per [`../_shared/handoff.md`](../_shared/handoff.md)
+   — *What I did* (the changed keys + the self-check line + the commit SHA or «nothing to commit») + *Review* (`.claude/sdd.local.md`) +
    *Run next* (utility variant: `/clear` optional, resume your backbone stage — name the likely one).
 
 ## Definition of Done

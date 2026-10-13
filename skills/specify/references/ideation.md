@@ -1,6 +1,6 @@
 # Ideation orchestration — specify step 3 (depth-gated named subagents)
 
-For a feature that's a real bet, the deep-dive answers aren't enough to commit to an approach. This pass grounds the committed approach in **§1 ¶3** of the spec. It is **read-only research + named subagents + user confirms** — nothing is written until the spec is. Everything stays at **product level**: no concrete datastore / broker / framework / library names (those are `design` decisions); every subagent is told the same.
+For a feature that's a real bet, the deep-dive answers aren't enough to commit to an approach. This pass grounds the committed approach in **§1 ¶3** of the spec. It is **read-only research + named subagents + user confirms** — the subagents write nothing; the confirmed recommendation is written into `spec.md` §1 ¶3 (already bootstrapped in step 1) as soon as the user confirms it. Everything stays at **product level**: no concrete datastore / broker / framework / library names (those are `design` decisions); every subagent is told the same.
 
 What runs is governed by the **interview-depth dial** ([`../../_shared/interview-depth.md`](../../_shared/interview-depth.md)), with feature **size** as a secondary trimmer. The analyses that used to run inline are now **named-subagent dispatches** — each with a clean, isolated context (the value is fresh eyes), spawned with `subagent_type: "sdd:<name>"` per [`../../_shared/agent-roster.md`](../../_shared/agent-roster.md) §Dispatching, with a `general-purpose` fallback if the namespaced agent isn't available.
 

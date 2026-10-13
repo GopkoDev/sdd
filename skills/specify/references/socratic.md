@@ -1,6 +1,8 @@
 # specify — delta over the shared Socratic loop
 
-Read [`../../_shared/socratic-loop.md`](../../_shared/socratic-loop.md) for the canonical 4-state machine, edits-log, and disk-write discipline. specify supplies only the deltas below.
+Read [`../../_shared/socratic-loop.md`](../../_shared/socratic-loop.md) for the canonical 4-state machine and edits-log, and [`../../_shared/write-and-commit.md`](../../_shared/write-and-commit.md) for the disk-write + commit discipline. specify supplies only the deltas below.
+
+**Disk writes.** `spec.md` was bootstrapped from the template in step 1. Each walked section (§4, §5, §6, §7) is written into it the moment its last decision resolves; a `save_as_oq` row lands in §8 immediately. No commit here — the commits come once, after the critic + F6 scan (step 8).
 
 ## Sections walked (in order)
 

@@ -1,6 +1,6 @@
 # Draft generation — per-section sourcing for design's in-memory draft
 
-The authoritative format for each section is the `<!-- … -->` comment in [`../templates/sad.md`](../templates/sad.md). This file is the operational glue: where each of the 12 Arc42 sections gets its content, and the pre-Socratic hygiene checks. The draft is held **in memory** — `sad.md` is not touched between the bootstrap copy and the per-section write (the shared disk-write discipline → [`../../_shared/socratic-loop.md`](../../_shared/socratic-loop.md)).
+The authoritative format for each section is the `<!-- … -->` comment in [`../templates/sad.md`](../templates/sad.md). This file is the operational glue: where each of the 12 Arc42 sections gets its content, and the pre-Socratic hygiene checks. The draft is held **in memory** — `sad.md` is not touched between the bootstrap copy and the per-section write (the shared disk-write + commit discipline → [`../../_shared/write-and-commit.md`](../../_shared/write-and-commit.md)).
 
 ## Inputs in priority order
 

@@ -13,5 +13,11 @@ PASS requires ALL of:
    "Review before continuing" part listing real `docs/features/rate-limit-bump/...` paths, and a
    "Run next" part naming the next `/sdd:` command.
 
+5. Commits per `skills/_shared/write-and-commit.md`: after the baseline commit, `spec.md` and the
+   `.size` + `.route` pair are committed in **separate** commits (the pair together in one; no
+   commit mixes `spec.md` with `.size`), no commit touches files outside `docs/features/rate-limit-bump/`
+   or `.gitignore`, and nothing under `docs/features/rate-limit-bump/` is left uncommitted. The
+   handoff's "What I did" names the commits with their short SHAs.
+
 FAIL if spec.md is missing, a section is absent with no explicit N/A, an AC leaks implementation
-tokens, `.size` is malformed, or no handoff block was printed.
+tokens, `.size` is malformed, no handoff block was printed, or the commits break item 5.

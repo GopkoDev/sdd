@@ -11,7 +11,7 @@
 1. Skill **малює всю секцію відразу** + нумерує рішення всередині (велика картина перед деталями).
 2. Питає **по одному рішенню** через `AskUserQuestion` (формулювання → [ask-style.md](./ask-style.md)).
 3. Користувач обирає одну з **4 дій**: **Прийняти** / **Виправити** / **Винести у відкрите питання** / **Викинути**.
-4. Skill **застосовує перехід** у пам'яті, веде **edits-log**, і лише наприкінці секції пише на диск + комітить.
+4. Skill **застосовує перехід**, веде **edits-log** і пише вирішену секцію на диск **одразу**; коміт — один на документ наприкінці кроку ([write-and-commit.md](./write-and-commit.md)).
 5. Внутрішні протиріччя між секціями ловить окремий clean-context критик ([critic.md](./critic.md)).
 
 ---
@@ -22,12 +22,12 @@ For each section/group in order, the skill:
 
 1. **Render the full proposed section** in one message — body text + a numbered list of the decisions it contains. The user sees the whole shape before any per-decision commitment (they catch duplicates / gaps / drop-the-whole-section problems early).
 2. **Walk per-decision resolutions** — one `AskUserQuestion` per decision, using the 4-state machine below.
-3. **Apply transitions** to the in-memory section as each resolution arrives.
+3. **Apply transitions** to the section as each resolution arrives.
 4. **Run any per-skill gate** on Approved decisions (e.g. `design`'s blast-radius gate → ADR). Edit/Drop/Save-as-OQ do not trigger gates.
-5. **Write the resolved section to disk** + any files the gate spawned + commit one bundled commit per section.
+5. **Write the resolved section to disk** + any files the gate spawned — immediately, **no commit**. Commits happen once at the end of the step, one per document, after the structural self-check ([write-and-commit.md](./write-and-commit.md)).
 6. **Move to the next section.** The skill **never returns** to a written section — cross-section drift is the critic's job, not a re-walk.
 
-On-disk artifacts are **not touched** until step 5. Everything before that is in-memory.
+The artifact file was bootstrapped from its template at the first write point; each section lands in it at step 5, so an interrupted session keeps every section already resolved.
 
 ## The 4-state machine (uniform across every decision-type)
 
@@ -83,4 +83,4 @@ A consuming skill's `references/socratic.md` (or an inline ≤5-line block in `S
 - **Per-skill gate** run on Approved decisions, if any (e.g. `design`: blast-radius → ADR).
 - **Open-Questions table location** (which section absorbs `save_as_oq` rows).
 
-Everything else — the 4-state machine, the edits-log schema, the cadence, the disk-write discipline — comes from this file.
+Everything else — the 4-state machine, the edits-log schema, the cadence — comes from this file; the disk-write + commit discipline comes from [write-and-commit.md](./write-and-commit.md).

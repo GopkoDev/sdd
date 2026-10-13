@@ -23,7 +23,7 @@ Five coverage types, ≥1 each:
 
 ## Forbidden tokens in §5 AC (stack-agnostic, zero tolerance)
 
-Checked by the critic's F6 and the pre-write regex scan:
+Checked by the critic's F6 and the regex scan over `spec.md` on disk:
 
 - **HTTP verbs**: `GET`, `POST`, `PUT`, `PATCH`, `DELETE`.
 - **URL paths**: anything starting with `/` then a lowercase identifier (`/orders`, `/items/{id}`, `/api/v1/...`).

@@ -142,7 +142,11 @@ Whoever owns product direction (PM / lead / the solo maintainer).
    the mermaid goes to the file, never dumped raw to the terminal — same rule as `design`), calling
    each step by its name rather than its id. Then **one `AskUserQuestion` call**: (a) steps to
    merge/split/drop (multiSelect over flagged candidates + the questions step 3 could not close),
-   (b) confirm the wave layout or name what must move. Apply.
+   (b) confirm the wave layout or name what must move. Apply — **writing as you go**: copy
+   [`./templates/roadmap.md`](./templates/roadmap.md) to `docs/roadmap.md` (an existing roadmap is
+   edited in place, never re-bootstrapped) with the destination, then write each step row, edge and
+   wave **as soon as the owner's answer settles it**, never the whole file at the end
+   ([`../_shared/write-and-commit.md`](../_shared/write-and-commit.md) §1).
 
 5. **Ask whether the file is worth keeping.** If the pass surfaced **no fog** — every step is
    sized, `## Not yet specified` is empty, `## Open decisions` is empty — then say so and put the
@@ -150,10 +154,11 @@ Whoever owns product direction (PM / lead / the solo maintainer).
    current, and the alternative is to build straight from `/sdd:specify <slug>`. **It is their
    call, not a stop.** They want the file as a shared reference — write it. Say the tradeoff once,
    plainly, and take the answer; never refuse to write a roadmap because the request was small or
-   clear.
+   clear. They decline → delete the `docs/roadmap.md` **this run created** (never a pre-existing
+   one), commit nothing, and hand off straight to `/sdd:specify <slug>`.
 
-6. **Write.** Fill [`./templates/roadmap.md`](./templates/roadmap.md) → `docs/roadmap.md`;
-   set `updated_at`.
+6. **Complete.** Fill what is still placeholder in `docs/roadmap.md` (fog vocabulary, decisions so
+   far, the mermaid graph); set `updated_at`.
 
 7. **Structural self-check** — per [`../_shared/self-check.md`](../_shared/self-check.md), re-read
    from disk, verify **6 items**:
@@ -178,10 +183,14 @@ Whoever owns product direction (PM / lead / the solo maintainer).
 
    Fix + re-check ≤2 cycles; surface the rest.
 
-8. **Commit + handoff.** Propose commit `roadmap: <what changed>`.
+8. **Commit + handoff.** After the self-check passes, commit per
+   [`../_shared/write-and-commit.md`](../_shared/write-and-commit.md) — one commit,
+   `roadmap: roadmap.md <what changed>`; an unresolved self-check item → no commit. **Invoked
+   in-flow** (a `specify` / `implement` / `ship` sync hook below) → don't commit here: the caller
+   commits `docs/roadmap.md` as its own document, after its own self-check, under its own message.
    Then emit the **stage-handoff block** per [`../_shared/handoff.md`](../_shared/handoff.md)
    (utility variant) — *What I did*
-   (incl. «self-check: 6/6 pass» and the fog count) + *Review* (`docs/roadmap.md`) + *Run next*:
+   (incl. «self-check: 6/6 pass», the fog count and the commit SHA) + *Review* (`docs/roadmap.md`) + *Run next*:
    **name the first unblocked step the way the file names it, then give the command on its own
    line, ready to run** — `/sdd:specify <slug>` for that step, `/sdd:scaffold` when the first step
    is the greenfield skeleton, or a recon pass on the top `## Not yet specified` area when the
@@ -190,10 +199,11 @@ Whoever owns product direction (PM / lead / the solo maintainer).
 
 ## Sync hooks (delivery keeps it current — anti-drift)
 
-- **`specify`** sets the step's `Status` to **spec'd** (and → **building** as implement starts)
-  and links `docs/features/<slug>/`. A spec'd feature with no step row gets one appended (source
+- **`specify`** sets the step's `Status` to **spec'd** and links `docs/features/<slug>/`. A spec'd feature with no step row gets one appended (source
   anchor = its spec). A step cannot go `spec'd` while its `Size` reads `fog` — specifying it *is*
   what clears the fog, so the hook replaces `fog` with a real size in the same edit.
+- **`implement`** sets the step's `Status` to **building** at its start and commits that one-line
+  change (`implement: <slug> roadmap.md building`) before the first task.
 - **`ship`** sets `Status: shipped` and adds the date + PR link to **Shipped**.
 - Neither hook re-waves the graph — structure changes only happen here, with the owner.
 

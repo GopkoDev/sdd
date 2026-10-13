@@ -11,7 +11,7 @@
 
 Кожен скіл перед хендофом перевіряє власний артефакт **з диска** за іменованим чеклістом.
 Знайшов проблему → виправив і перевірив ще раз (максимум 2 цикли). Не зміг виправити →
-чесно каже користувачу, ніколи мовчки. Результат — один рядок у хендофі: «self-check: 6/6 pass».
+чесно каже користувачу, ніколи мовчки. Self-check іде **до** комітів: не пройшов → комітів нема. Результат — один рядок у хендофі: «self-check: 6/6 pass».
 Скіли з важкими верифікаторами (critic, reviewer, drift-check, mermaid-check, GATE) не дублюють
 роботу — їхній верифікатор і **є** self-check; вони додають лише структурні пункти, які він не покриває.
 
@@ -32,6 +32,10 @@
 5. **Report in the handoff.** *What I did* carries one line: «self-check: 6/6 pass» (or
    «self-check: 5/6 — <failing item> unresolved, see above»).
 
+**Order: self-check → commit → handoff.** The self-check runs **before** any commit
+([`write-and-commit.md`](./write-and-commit.md)): a pass unlocks the step's per-document commits; an
+unresolved item means zero commits — the files stay on disk, uncommitted, and the handoff says why.
+
 ## Heavy verifiers count (no double work)
 
 A skill that already runs a heavy verifier — the clean-context **critic** (`specify`, `design`),
@@ -49,6 +53,8 @@ in one literal sentence («<verifier> = this skill's structural self-check»).
   appears in the coverage table» is. Judgment belongs to the heavy verifiers.
 - **Checking the draft, not the disk.** The bug this contract exists to catch is the write that
   didn't land the way the conversation assumed.
+- **Committing first, checking after.** A commit marks a checked document; a failing check after
+  the commit leaves broken history.
 - **Endless fix loops.** Two cycles, then surface. A checklist that can't converge in two fixes is
   flagging a real problem the user must see.
 - **A silent pass.** The handoff line is mandatory even when everything passes — «self-check: 6/6

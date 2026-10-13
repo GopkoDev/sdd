@@ -72,15 +72,19 @@ Architect / Tech Lead — the same person who fixed the foundation in `survey`.
 5. **Reconcile the map's machine keys.** If the commands that actually worked differ from the map's
    frontmatter (`build_cmd` / `test_cmd` / `lint_cmd` / `migration_tool`), **update the map** —
    `implement`'s command-detection cascade reads these keys; stale keys poison every later feature.
-6. **Commit** — `scaffold: materialize skeleton`.
-7. **Structural self-check** — per [`../_shared/self-check.md`](../_shared/self-check.md): verify
-   **4 items**: (1) the smoke test was actually executed and is green (build + boot + empty suite +
-   migration tool — command output in hand, not assumed); (2) every S-task is done or explicitly
-   dropped with a reason; (3) the map's machine keys match the commands that just ran (updated if
-   they diverged); (4) the commit contains the skeleton files. Fix + re-check ≤2 cycles; surface
-   anything unresolved.
+6. **Structural self-check** — per [`../_shared/self-check.md`](../_shared/self-check.md), **before
+   any commit**: verify **4 items**: (1) the smoke test was actually executed and is green (build +
+   boot + empty suite + migration tool — command output in hand, not assumed); (2) every S-task is
+   done or explicitly dropped with a reason; (3) the map's machine keys match the commands that just
+   ran (updated if they diverged); (4) every file the S-tasks' `files_hint` names exists on disk and
+   is not gitignored. Fix + re-check ≤2 cycles; surface anything unresolved — an unresolved item
+   means no commits.
+7. **Commit** per [`../_shared/write-and-commit.md`](../_shared/write-and-commit.md) — the skeleton
+   is one indivisible commit (`scaffold: materialize skeleton`, paths = the materialized files +
+   the settings `.gitignore` patch); the map, if step 5 changed it, is a **separate** commit
+   (`scaffold: architecture-map.md machine keys`).
 8. **Handoff.** Emit the **stage-handoff block** per [`../_shared/handoff.md`](../_shared/handoff.md) —
-   *What I did* (tasks materialized, smoke-test result, «self-check: 4/4 pass») + *Review before
+   *What I did* (tasks materialized, smoke-test result, «self-check: 4/4 pass», the commits with short SHAs) + *Review before
    continuing* (the committed skeleton diff + `docs/architecture-map.md`) + *Run next*: `/clear`,
    then `/sdd:specify <slug>` — the first real feature, with a real repo to build into.
 

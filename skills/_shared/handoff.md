@@ -1,7 +1,8 @@
 # Stage handoff — what every skill prints when it finishes (the output contract)
 
 > **Reference-only.** Not a skill. **Every** skill ends by emitting the handoff block defined here —
-> as its **last output**, after it has proposed its commit. The format lives only in this file; each
+> as its **last output**, after its structural self-check and its per-document commits
+> ([`write-and-commit.md`](./write-and-commit.md)). The format lives only in this file; each
 > skill keeps a one-line pointer and supplies its own *What I did* / *Review* / *next command*. This
 > exists because a bare «Next: …» line is hard to act on — the user can't tell what changed, which
 > files to open, or what to run next without scrolling back.
@@ -13,7 +14,7 @@ equivalents per [`tool-adapters.md`](./tool-adapters.md).
 
 Кожен крок (skill) наприкінці **завжди** друкує однаковий хендоф-блок із трьох секцій:
 
-1. **What I did** — що стадія зробила + який коміт запропонувала (не змушуй гортати вгору).
+1. **What I did** — що стадія зробила + які коміти зробила, з короткими SHA (не змушуй гортати вгору).
 2. **Review before continuing** — посилання на файли, які стадія створила/змінила і які треба
    глянути на цьому геті (реальні `docs/features/<slug>/…` шляхи — клікабельні/копіювані).
 3. **Run next** — спершу `/clear` (обов'язково для forward-переходу — наступна стадія перечитує
@@ -30,7 +31,8 @@ equivalents per [`tool-adapters.md`](./tool-adapters.md).
 ## ✅ <skill> — <slug>
 
 **What I did**
-- <1–3 bullets: the artifact(s) produced/changed + the commit proposed>
+- <1–3 bullets: the artifact(s) produced/changed>
+- committed `<sha>` <message>   ← one line per commit, or the reason it was skipped
 
 **Review before continuing**
 - `docs/features/<slug>/<file>` — <what to check here>
@@ -47,10 +49,12 @@ equivalents per [`tool-adapters.md`](./tool-adapters.md).
 
 Rules for filling it:
 
-- **Always emit it** as the final output, once per run, after the commit is proposed. Never end a
+- **Always emit it** as the final output, once per run, after the commits. Never end a
   skill on a bare «Next: X».
-- **What I did** — concrete and self-contained: name the files written and the proposed commit
-  message, so the user doesn't scroll up to reconstruct it.
+- **What I did** — concrete and self-contained: name the files written and every commit made
+  (short SHA + message), or why a commit was skipped (nothing changed, not a git repo, merge in
+  progress, `auto_commit: off` → the ready-to-run commands), so the user doesn't scroll up to
+  reconstruct it.
 - **State the size + route used.** *What I did* names the `feature_size` AND the route the stage
   worked at — «size M + route standard (from `.size`/`.route`)»; if the stage had to **default**
   because a file was missing, say so loudly — «size M (default — no `.size`; run
@@ -114,9 +118,9 @@ Rules for filling it:
 | `screens` | `docs/features/<slug>/screens.md` (+ `screens.pen` / Figma node-refs per tool) | `/sdd:tasks <slug>` |
 | `tasks` | `tasks/` + `tasks.json` | `/sdd:plan-tests <slug>` ↳ then `/sdd:implement <slug>` |
 | `plan-tests` | `test-plan.md` (or `spec.md` `## Test plan` for XS/S) | `/sdd:implement <slug>` |
-| `implement` | the committed diff (code + tests) + `tasks/tracker.md` | `/sdd:review <slug>` |
-| `review` | `_review/review-<date>.md` | `/sdd:ship <slug>` (PASS) · `/sdd:implement <slug>` (CHANGES, no `/clear`) |
-| `ship` | `CHANGELOG` + the PR | **Done** — PR command/URL; merge is your call |
+| `implement` | the committed diff (code + tests) + `tasks/tracker.md` / `tasks.json` statuses (+ `docs/roadmap.md` `Status: building`) | `/sdd:review <slug>` |
+| `review` | `_review/review-<date>.md` (committed; + `spec.md` when a finding was deferred) | `/sdd:ship <slug>` (PASS) · `/sdd:implement <slug>` (CHANGES, no `/clear`) |
+| `ship` | `CHANGELOG` + `docs/roadmap.md` (each committed before the PR command) + the PR | **Done** — PR command/URL; merge is your call |
 | `config` | `.claude/sdd.local.md` (the settings file itself is gitignored — the `.gitignore` patch is the only thing to commit) | resume your backbone stage — e.g. `/sdd:specify <slug>` |
 | `classify-size` | `.size` + `.route` | resume — e.g. `/sdd:specify <slug>` |
 | `design-system` | `docs/design-system.md` | resume — e.g. `/sdd:ux-flows <slug>` |

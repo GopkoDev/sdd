@@ -5,7 +5,7 @@ Read [`../../_shared/critic.md`](../../_shared/critic.md) for the canonical disp
 ## Placeholders
 
 - **`{{ARTIFACT_NAME}}`** = "Product spec (context / goals / user stories / acceptance criteria / NFRs / KPIs)".
-- **`{{DRAFT}}`** = the in-memory `spec.md` draft.
+- **`{{DRAFT}}`** = the path `docs/features/<slug>/spec.md` — the critic Reads the file from disk (it was written section by section); the skill patches that file with the findings the user accepts.
 - **`{{EDITS_LOG}}`** = the step-7 edits-log.
 - **`{{UPSTREAM_FILES}}`** (the critic Reads these itself):
   - `docs/features/<slug>/CONTEXT.md` — canonical glossary (roles, domain terms).

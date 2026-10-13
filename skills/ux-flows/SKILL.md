@@ -72,22 +72,27 @@ here).
    backend-only user story is listed as out of scope, not drawn.
 4. **Socratic pass — prose, never raw mermaid.** Per
    [`../_shared/diagram-presentation.md`](../_shared/diagram-presentation.md): write each flow into
-   `docs/features/<slug>/ux-flows.md` (from [`./templates/ux-flows.md`](./templates/ux-flows.md)),
+   `docs/features/<slug>/ux-flows.md` (bootstrapped from [`./templates/ux-flows.md`](./templates/ux-flows.md)
+   on the first flow; each flow lands on disk as soon as it's drafted — progressive writes per
+   [`../_shared/write-and-commit.md`](../_shared/write-and-commit.md)),
    validate it parses per [`../_shared/mermaid-check.md`](../_shared/mermaid-check.md), then
    describe it in plain words (every branch) and confirm — at medium/hard one `AskUserQuestion` per
    flow (Accept / Fix / Save-as-OQ / Drop); at **easy**, write + one-line summary into the
    assumptions ledger and proceed.
-5. **Fill the AC map + write + commit.** Complete the AC-coverage table (every UI-touching §5 AC →
-   flow/node/branch, or an explicit `N/A: <reason>`), re-validate every mermaid block, stamp
-   `updated_at`, propose commit `ux-flows: <slug>`.
+5. **Fill the AC map + write.** Complete the AC-coverage table (every UI-touching §5 AC →
+   flow/node/branch, or an explicit `N/A: <reason>`) on disk, re-validate every mermaid block, stamp
+   `updated_at`. No commit yet — it follows the self-check.
 6. **Structural self-check** — per [`../_shared/self-check.md`](../_shared/self-check.md): re-read
    the file from disk and verify **4 items**: (1) every UI-touching §4 user story has a flow;
    (2) every flow node's SCR id exists in the inventory (and every inventory row appears in ≥1
    flow); (3) every UI-touching §5 AC appears in the coverage table with a flow/branch or an
    explicit N/A; (4) every mermaid block parses. Fix + re-check ≤2 cycles; surface anything
    unresolved.
-7. **Handoff.** Emit the **stage-handoff block** per [`../_shared/handoff.md`](../_shared/handoff.md)
-   — *What I did* (incl. «self-check: 4/4 pass»; + «`docs/design-system.md` absent — run
+7. **Commit + handoff.** On a passing self-check, **commit per
+   [`../_shared/write-and-commit.md`](../_shared/write-and-commit.md)** — one commit for
+   `ux-flows.md` (`ux-flows: <slug> ux-flows.md`); an unresolved item means no commit. Then emit the
+   **stage-handoff block** per [`../_shared/handoff.md`](../_shared/handoff.md)
+   — *What I did* (incl. «self-check: 4/4 pass» + the commit SHA; + «`docs/design-system.md` absent — run
    `/sdd:design-system`» when it was) + *Review* (`docs/features/<slug>/ux-flows.md`) + *Run next*:
    `/clear`, then `/sdd:design <slug>` (it reads these flows as target-surface evidence).
 

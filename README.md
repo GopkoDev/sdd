@@ -248,7 +248,7 @@ max_red_retries: 3         # integer ≥1 — RED→GREEN attempts before escala
 gate_lint: true            # true | false — include lint in the per-task gate
 gate_vet: true             # true | false — include vet / static-analysis in the per-task gate
 require_integration: auto  # auto | always | never (Docker-probed)
-auto_commit: per_task      # per_task | per_phase | off
+auto_commit: per_task      # per_task | per_phase | off — off also stops document-stage commits
 branch_strategy: feature   # feature | current
 cmd_test_unit: ""          # empty = autodetect (escape hatch)
 cmd_test_integration: ""
@@ -271,7 +271,7 @@ Grouped the way `/sdd:config` asks about them — one answer per group, several 
 | **Document language** | `artifact_language` | `en` | the prose language of every pipeline document; headings, frontmatter and machine tokens stay English |
 | **Model tier** | `judgment_model`, `model_test_author`, `model_implementer`, `model_reviewer`, `effort_test_author`, `effort_implementer`, `effort_reviewer` | judgment `opus`, execution `sonnet` | which tier the judgment agents and the execution agents run at. `judgment_model` is one switch for all five judges; `opus` is a floor, not a pin |
 | **Strictness & gates** | `tdd`, `stop_on_red`, `max_red_retries`, `gate_lint`, `gate_vet`, `require_integration` | `true` / `true` / `3` / `true` / `true` / `auto` | whether the failing test comes first, what a surviving red does to the run, and which tiers the per-task gate runs |
-| **Execution & commits** | `team_mode`, `workflow_mode`, `max_parallel_agents`, `isolation`, `auto_commit`, `branch_strategy` | `false` / `auto` / `3` / `worktree` / `per_task` / `feature` | sequential vs. agent team vs. dynamic workflow, how wide it fans out, and how finely the work commits. `team_mode` / `workflow_mode` need Claude Code — on Codex CLI and Cursor they clamp to sequential |
+| **Execution & commits** | `team_mode`, `workflow_mode`, `max_parallel_agents`, `isolation`, `auto_commit`, `branch_strategy` | `false` / `auto` / `3` / `worktree` / `per_task` / `feature` | sequential vs. agent team vs. dynamic workflow, how wide it fans out, and how finely the work commits (every document stage also commits its own documents, one commit per document; `auto_commit: off` turns that off too). `team_mode` / `workflow_mode` need Claude Code — on Codex CLI and Cursor they clamp to sequential |
 | **Commands** *(never asked)* | `cmd_test_unit`, `cmd_test_integration`, `cmd_lint`, `cmd_vet` | `""` | empty means autodetect, which beats a pinned command that goes stale. Fill one only for a repo the cascade can't read |
 
 Command detection (for `implement`'s gate) is a stack-agnostic cascade: settings override →

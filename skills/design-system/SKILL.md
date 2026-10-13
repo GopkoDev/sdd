@@ -60,8 +60,10 @@ Whoever owns the product's look (designer / frontend lead / the solo maintainer)
    (markdown wireframes in `screens.md`) is **always** offered — it needs no MCP and never blocks;
    **(b) platform posture** — mobile-first / desktop-first / responsive-both;
    **(c) token source** — the code file(s) found in step 2 / the tool's variables / «none yet».
-4. **Write the canon.** Fill [`./templates/design-system.md`](./templates/design-system.md) →
-   `docs/design-system.md`: frontmatter `tool` + `figma_file`/`pen_file` (the one matching the
+4. **Write the canon, section by section.** Right after the step-3 answers, bootstrap
+   [`./templates/design-system.md`](./templates/design-system.md) → `docs/design-system.md`, then
+   write each part to disk as soon as it is decided (progressive writes per
+   [`../_shared/write-and-commit.md`](../_shared/write-and-commit.md)): frontmatter `tool` + `figma_file`/`pen_file` (the one matching the
    tool; the other stays `""`), posture, token source, the component inventory — each row citing
    `file:line` (code) or the node/URL (tool-side) — and the cross-screen conventions.
 5. **Bootstrap the tool library** (`tool: pencil` only — figma links an existing file, `code`
@@ -87,10 +89,13 @@ Whoever owns the product's look (designer / frontend lead / the solo maintainer)
    `<placeholder>` stubs survive; (5) `tool: pencil` ⇒ the `pen_file` exists on disk and is larger
    than the empty stub (step 5 ran and the user saved). Fix + re-check ≤2 cycles; surface anything
    unresolved.
-7. **Commit + handoff.** Propose commit `design-system: establish <tool> canon` (on pencil —
-   including the seeded `pen_file`). Then **emit the
+7. **Commit + handoff.** On a passing self-check, **commit per
+   [`../_shared/write-and-commit.md`](../_shared/write-and-commit.md)** — one commit for
+   `docs/design-system.md` (`design-system: <tool> canon design-system.md`) and, on pencil, a
+   separate one for the seeded `pen_file` (`design-system: <tool> canon <pen_file>`) when it
+   changed on disk. An unresolved item means no commits. Then **emit the
    stage-handoff block** per [`../_shared/handoff.md`](../_shared/handoff.md) (utility variant) —
-   *What I did* (incl. «self-check: 4/4 pass») + *Review* (`docs/design-system.md`) + *Run next*:
+   *What I did* (incl. «self-check: 5/5 pass» + the commit SHAs) + *Review* (`docs/design-system.md`) + *Run next*:
    resume your backbone stage (typically `/sdd:ux-flows <slug>` for the UI feature in flight);
    `/clear` optional.
 
