@@ -101,7 +101,7 @@ Rules for filling it:
 
 | Stage | Review before continuing (files written) | Run next |
 |---|---|---|
-| `interview` | `docs/idea-brief.md` (the 8-section brief — nothing on disk outside a repo) | `/sdd:survey` (the repo answers what it is), then `/sdd:roadmap` (decompose it) ↳ or `/sdd:specify <slug>` straight through when the brief covers exactly one feature |
+| `interview` | `docs/idea-brief.md` (eight sections; conversation artifact when writes are prohibited) | Only `ready-for-roadmap` → `/sdd:roadmap`; `ready-for-specify` → `/sdd:specify <slug>`. Otherwise name the evidence action, reframe, or stop. `survey` is suggested separately if a repo map is needed. |
 | `survey` | `docs/architecture-map.md` (+ scaffold `tasks.json` on greenfield) | `/sdd:roadmap` when a brief is on disk (the map supplies the zones) ↳ or brownfield → `/sdd:specify <slug>`; greenfield → `/sdd:scaffold` |
 | `scaffold` | the materialized skeleton (committed diff) + green smoke test | `/sdd:specify <slug>` |
 | `specify` | `docs/features/<slug>/spec.md` | `/sdd:clarify <slug>` ↳ or `/sdd:ux-flows <slug>` (zero §8 OQ — fast lane; no human-facing UI → `/sdd:design <slug>`) |

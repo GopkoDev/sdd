@@ -4,6 +4,14 @@ For a feature that's a real bet, the deep-dive answers aren't enough to commit t
 
 What runs is governed by the **interview-depth dial** ([`../../_shared/interview-depth.md`](../../_shared/interview-depth.md)), with feature **size** as a secondary trimmer. The analyses that used to run inline are now **named-subagent dispatches** — each with a clean, isolated context (the value is fresh eyes), spawned with `subagent_type: "sdd:<name>"` per [`../../_shared/agent-roster.md`](../../_shared/agent-roster.md) §Dispatching, with a `general-purpose` fallback if the namespaced agent isn't available.
 
+## Brief reuse takes precedence
+
+Apply [`brief-reuse.md`](./brief-reuse.md) before this suite. Reuse relevant accepted decisions
+and checked evidence; only missing, changed, contradictory, or explicitly reopened signals run.
+The full-suite quotas and mandatory matrix/RICE citations below apply to a **fresh ideation
+pass**, not to a direction already grounded by interview. Cite what actually exists. A
+fact-check result is not a competitive-gap score. No usable brief → the legacy behavior below.
+
 ## When each agent runs (depth × size)
 
 | Depth | What runs |
@@ -17,6 +25,8 @@ What runs is governed by the **interview-depth dial** ([`../../_shared/interview
 ## The dispatches
 
 The dispatching prompt is the **only channel** to a clean-context agent (per the shared agent contract). For every agent below, the prompt inlines: the **captured idea (verbatim baseline)** + the **step-2 deep-dive answers** + (if it exists) the **`CONTEXT.md` path** for canonical terms. The spec is not written yet — there is no `spec.md` to read, so the material is inlined.
+When reusing a brief, also pass its path and relevant accepted decisions/evidence with provenance;
+state the exact remaining gap. Do not drop those constraints when dispatching fresh-context work.
 
 1. **`researcher`** (`sdd:researcher`) — *medium + hard.* Competitive + adjacent-solution research with web access. Returns a cited table (Product · URL · Features · Value 1–5 · Gap), each row footnoted with date + query, plus a one-line synthesis of the biggest gap. **Fallback:** a `general-purpose` Agent given the same prompt and `WebSearch`/`WebFetch`. **If web access is unavailable** in this run, accept its `RESEARCH_LIMITED` output and carry the gap as a noted gap (like the `mmdc` fallback elsewhere) — never invent competitors to fill the table.
 2. **`strategist`** (`sdd:strategist`) — *hard only.* Generates the three strategic approaches — A Simplicity / B Differentiation / C Balanced — each with Name · Thesis · For-whom · Outcome-metric · Key-trade-off · Effort-signal. Dispatch it **together with `researcher`** in one message (they're independent).

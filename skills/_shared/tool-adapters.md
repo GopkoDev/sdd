@@ -25,6 +25,15 @@ The `CLAUDE_CODE_*` env vars the roster mentions (`CLAUDE_CODE_SUBAGENT_MODEL`,
 `CLAUDE_CODE_EFFORT_LEVEL`, `CLAUDE_CODE_FORK_SUBAGENT`) are **Claude Code-only** — Codex CLI and
 Cursor ignore them; use the host's own model settings instead.
 
+## Interview interaction exception
+
+`interview` detects the **actual available question channel**, not just the host name. Use a
+native question tool if present; otherwise ask in plain text and wait. Decision questions may
+have options; factual questions may be open text. Follow its adaptive exception in
+[`ask-style.md`](./ask-style.md). A non-interactive/headless run stops before writes or helpers;
+a missing branded `AskUserQuestion` alone does not mean no human can answer.
+Inline helper fallback is a self-check, never an independent clean-context critique.
+
 ## The rule
 
 When a mechanism is unavailable in the host tool, **degrade to the inline sequential

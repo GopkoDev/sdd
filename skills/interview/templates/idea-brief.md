@@ -2,55 +2,63 @@
 status: Draft
 owner: "<idea owner>"
 updated_at: "<today YYYY-MM-DD>"
-depth: "<easy | medium | hard — the interview depth this brief came out of>"
+depth: "<easy | medium | hard — resolved question ceiling>"
 ---
 
 # Idea brief — <slug>
 
-<!-- instruction: the product-level record of what the interview pulled OUT OF THE OWNER'S HEAD —
-the context an agent cannot read anywhere in the repo. Eight sections, deliberately short: a
-working brief is a page, not a document. `roadmap` reads this file as its source and anchors every
-step row at a section of it (`idea-brief.md §2 Problem`), so keep the headings verbatim and make
-each section quotable on its own.
-This is a PRODUCT brief. No datastore / broker / framework / library names, no table schemas, no
-endpoints, no latency targets — those belong to `design` and `data-model`. -->
+<!-- instruction: Eight short sections; keep these headings verbatim for roadmap/specify.
+Preserve the four frontmatter keys. Readiness belongs in §7, not in a new status/schema.
+Use artifact_language for prose. Evidence labels and readiness tokens stay as written.
+Material assertions distinguish owner-reported / source-verified / assumption / unknown.
+Preserve technical names in raw words, evidence, and existing/owner-required constraints;
+do not turn an interview into architecture design, a specification, or an implementation plan.
+Explicit None identified / Not established is valid; never pad a section with invented facts. -->
 
 ## 1. Raw idea
 
-<!-- instruction: the idea in the owner's own words, verbatim from phase 1. One paragraph.
-Never rewrite it into spec-speak — this is the baseline everything below is measured against. -->
+<!-- instruction: The owner's actual initial words, verbatim. Preserve the baseline when the
+direction changes; later accepted changes belong in §7. Never replace it with a polished rewrite. -->
 
 ## 2. Problem
 
-<!-- instruction: 1–3 sentences with the facts and numbers the interview surfaced. The problem
-only — a sentence that names a solution belongs in §7. -->
+<!-- instruction: Concrete observed/reported problem, impact and observable desired outcome.
+Label the origin of material claims; numbers only if supplied or verified. Source references
+can point to the compact evidence entries in §6. Separate a proposed solution from the problem. -->
 
 ## 3. Users
 
-<!-- instruction: who suffers, how often, which segments. Named roles from the domain, never a
-generic «users». -->
+<!-- instruction: Affected actors and situations, including operators for technical changes.
+Do not invent segments or speak for an absent stakeholder without labeling the assumption. -->
 
 ## 4. Why now
 
-<!-- instruction: the trigger — an incident, a contract, a deadline, a strategic shift. «It would
-be nice» is not a trigger; when there isn't one, say so plainly here. -->
+<!-- instruction: Real trigger or urgency and its origin; if none, say no trigger established.
+Do not infer a deadline from enthusiasm. -->
 
 ## 5. Out of scope
 
-<!-- instruction: bullets — what this deliberately does NOT cover, each with a one-line reason.
-This is what keeps the roadmap from growing the idea on its own. -->
+<!-- instruction: Agreed exclusions with reasons and existing/owner-required constraints to
+preserve. Constraints may name technologies. Distinguish confirmed constraints from proposals. -->
 
 ## 6. Risks
 
-<!-- instruction: bullets, weakest spot first — what the interview found that could sink this.
-Phase 2's hidden assumptions land here in the form «assumes X; false if Y». -->
+<!-- instruction: Weakest consequential assumption first; include reversibility/ownership where
+relevant. Keep a compact evidence ledger: claim/question | class | source/origin | finding/limit.
+Source-verified entries cite an inspected URL+date or file+section/line (+ revision if known).
+Label research limitations, contradictions, and whether critique was independent or inline.
+Do not turn a predicted failure or an owner's confirmation into independent factual evidence. -->
 
 ## 7. Recommendation
 
-<!-- instruction: 2–4 sentences — the shape of the idea after the interview and the position you
-carried through it. One direction, not a menu of options. -->
+<!-- instruction: Chosen direction, observable intended result, major tradeoff, rejected
+credible alternatives and reasons. Distinguish owner-accepted decisions from proposals.
+Write Outcome: ready-for-specify | ready-for-roadmap | needs-evidence | reframe | stop.
+Ready requires confirmed consequential choices and no blocking unknowns. No new scope by inference.
+Name the next action; a learning experiment may be the right result instead of implementation. -->
 
 ## 8. Open questions
 
-<!-- instruction: one line each, with an owner — what the interview could not close. An empty §8
-after a hard-depth pass is suspicious, not clean. -->
+<!-- instruction: Each material unknown: consequence | blocking/nonblocking | verification
+action | owner (or explicitly unassigned). Include unsupported facts and unconfirmed decisions.
+None identified is valid. Budget exhaustion or request for summary does not resolve anything. -->

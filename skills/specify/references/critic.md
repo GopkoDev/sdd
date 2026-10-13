@@ -9,6 +9,7 @@ Read [`../../_shared/critic.md`](../../_shared/critic.md) for the canonical disp
 - **`{{EDITS_LOG}}`** = the step-7 edits-log.
 - **`{{UPSTREAM_FILES}}`** (the critic Reads these itself):
   - `docs/features/<slug>/CONTEXT.md` — canonical glossary (roles, domain terms).
+  - `docs/idea-brief.md` when reused, plus the current owner corrections supplied in the prompt.
   - any reference module / doc the user named in step 5 (paths only).
 
 ## F5 structural floor (this artifact)
@@ -27,6 +28,15 @@ This is specify's primary F6. Scan §5 AC text for the forbidden tokens in [`dra
 ```
 
 Also flag any concrete technology name (datastore / broker / framework / library) appearing in §1–§3 — those belong to `design`.
+
+## Brief preservation check
+
+When interview was reused, check the draft against its accepted scope/constraints, rejected
+alternatives, evidence limits, and current owner corrections per [`brief-reuse.md`](./brief-reuse.md).
+Do not demand new competitive tables or RICE/matrix cells for already covered decisions. Flag
+an unverified claim promoted to fact, a blocking unknown silently answered, or a confirmed
+constraint dropped during product-level rephrasing. Technical detail stays traceable in the
+brief/design source; its absence as a technology name in an AC is not itself lost scope.
 
 ## F1 specialization — approach drift
 

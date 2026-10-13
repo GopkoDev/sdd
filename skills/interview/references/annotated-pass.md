@@ -1,119 +1,57 @@
-# Annotated pass — a medium-depth interview, start to finish
+# Annotated adaptive pass — engineering feature
 
-A real-shaped walkthrough so you can calibrate question shape and pacing. The
-idea is deliberately ordinary. Margin notes in `> [why]` explain each move. Eight
-questions total — squarely medium depth.
+Illustrative dialogue, **not an executed eval or evidence of a real product incident**.
+The illustrative project file and owner's replies below are test inputs, not verified facts.
 
-**User's opening line:** "I want to start a weekly newsletter for engineering managers."
+## Starting context
 
----
+Owner: “Our on-call engineers cannot tell whether yesterday's exports finished. We already use
+PostgreSQL. I want one place to see the last outcome; no new notification service.”
+Saved ceiling: medium. No opening depth question. The interviewer preserves this raw text,
+including PostgreSQL, and reads the supplied `docs/export-operations.md`.
 
-### Depth
+> Illustrative file evidence: the existing worker records completion/failure per export.
+> A real run must cite the actual inspected file/section, not this example.
 
-> [why] One question, then commit. Don't interview about the interview.
+## Questions adapt to evidence
 
-**Q0 — How hard should I push?**
-- **(Recommended) Medium — the standard pass (6-10 questions)** ← picked
-- Easy — quick gut-check (3-4)
-- Hard — interrogate every assumption (10-15)
+**Q1 — fact, open text:** “What happened during the most recent incident?”
+Owner: “The worker failed, the engineer reran the export, then discovered the first run had
+completed late. We need to see both outcomes before rerunning.”
 
-"Medium it is. Start with the idea in one sentence — you have it: a weekly
-newsletter for engineering managers."
+Record this as owner-reported. Do not infer failure frequency, a financial loss, or a demand metric.
+The existing operation record answers whether new result storage is needed; no competitor search.
 
----
+**Q2 — decision:** “Should this first change show recorded outcomes only, or also control reruns?”
+Recommend read-only visibility because the owner excluded a new service and the incident points
+at missing information; explain that controlling reruns adds operational behavior.
+Owner: “Visibility only, including late completion. Keep current access rules.”
 
-### Phase 1 — Understand the idea
+**Scoped evidence check:** inspect the existing read path/access policy if available. If absent,
+record the access constraint and the missing verification; do not infer that every engineer has access.
+This example assumes the supplied project source establishes an existing permitted read path.
 
-> [why] The one-liner exists, so skip "what is it" and go straight to audience
-> precision — "engineering managers" is a wide net.
+**Q3 — accepted direction:** “Use the existing outcome records for a read-only view, preserve
+current access, and leave rerun control out. Is that the direction to specify?”
+Owner: “Yes.”
 
-**Q1 — Which manager, exactly?**
-- **(Recommended) New EMs in their first year** — sharpest pain, least served ← picked
-- Mid-level EMs (3-5 years) — biggest population
-- Directors / EMs-of-EMs — highest leverage, smallest audience
+Three substantive questions under a medium ceiling; no target of six or ten questions.
+The owner confirmed the direction, not independent truth of every factual premise.
 
-> [why] They picked new EMs. That tightens everything downstream. Now pin the outcome.
+## Result
 
-**Q2 — What does a reader DO differently after a good issue?**
-- **(Recommended) Tries one concrete tactic that week** — behavior, not vibes ← picked
-- Feels less alone in the role
-- Saves it to read "later" (be honest if this is the real outcome)
+Outcome: `ready-for-specify` when the inspected source supports the read path and no blocker
+remains. Brief §1 is unchanged; §2 describes the reported incident and intended behavior; §5
+preserves access and excludes rerun control; §6 distinguishes owner report from source evidence;
+§7 records acceptance and the simpler reuse option; §8 says None identified if true.
+State separately: structural checks passed; evidence/readiness checked. The helper count can be zero.
 
-> [why] "Tries one tactic" is a strong, testable outcome. Move on — Phase 1 is done in 2.
+## Contrasting endings
 
----
-
-### Phase 2 — Stress-test (the core)
-
-> [why] Cost-of-waiting first, because "weekly" is the load-bearing word and solo
-> cadence is the usual killer.
-
-**Q3 — Weekly is a promise. What happens the first week you miss?**
-- **(Recommended) Start bi-weekly — protect the streak you can actually hold** ← picked
-- Keep weekly — the cadence IS the product, build a buffer of 4 issues
-- Weekly but allow skip-weeks, stated up front
-
-> [why] They moved to bi-weekly — a real de-risk. Now premortem the demand side.
-
-**Q4 — It's six months out and you stopped. Most likely cause?**
-- **(Recommended) Writing each issue took 5 hours, not 1** — effort blew up ← picked
-- Nobody subscribed
-- It worked but wasn't worth it
-
-> [why] Effort, not demand, is their fear. Drill that — it's a new assumption.
-
-**Q5 (drill) — Where do those 5 hours go?**
-- **(Recommended) Researching what to write** — no repeatable source ← picked
-- Writing and editing prose
-- Design / formatting / sending
-
-> [why] Root cause is *sourcing*, not writing. That reframes the whole idea —
-> flag it now rather than at the summary.
-
-"The weakest spot is real: without a repeatable source of material, week 3 is a
-blank page. That's worth solving before you name it a newsletter."
-
-> [why] Naive-listener check on positioning before leaving Phase 2.
-
-**Q6 — A new EM sees the title cold. What do they assume?**
-- **(Recommended) That it's generic leadership fluff** — needs an EM-specific hook ← picked
-- That it's too junior for them
-- That it's a paid course funnel
-
----
-
-### Phase 3 — Propose new angles
-
-> [why] Now actively propose. The sourcing problem points at a sharper shape.
-
-**Q7 — Given sourcing is the real constraint, reshape it:**
-- **(Recommended) "One real EM situation, dissected" each issue** — your own week is the source ← picked
-- Curated links with commentary — lowest effort, lowest differentiation
-- Interview a different EM each issue — high value, high coordination cost
-
-> [why] The picked angle dissolves the 5-hour problem: the source becomes the
-> user's own week, which they already have. Land here.
-
----
-
-### Final summary (full — 8 questions)
-
-## Revised idea
-A **bi-weekly** letter for **first-year engineering managers**, where each issue
-**dissects one real situation from the author's own week** and ends with **one
-tactic the reader can try**. The cadence is sustainable, the source is built-in,
-and the promise is behavioral, not inspirational.
-
-## What surfaced
-- **Hidden assumptions**: that "weekly" was free, and that the hard part was writing.
-- **Main tradeoff**: reach (broad "EMs") vs sharpness (first-year EMs) — chose sharpness.
-- **Weakest spot**: a repeatable source of material. Solved by sourcing from the author's own week.
-
-## Alternative angles
-1. One real situation dissected per issue (chosen — kills the sourcing problem).
-2. Curated links with commentary (lowest effort, weakest differentiation).
-3. A rotating EM interview (highest value, but adds coordination the author was trying to avoid).
-
-## Next step
-Write three "one situation dissected" issues from the last three weeks *before*
-announcing anything — prove the source is real, then commit to a cadence.
+- If access would change or data exposure is consequential, dispatch explicit `mode: interview`
+  critique, even with an easy ceiling. Preserve any material finding until resolved.
+- If the existing records omit late completion and the feasibility is unknown, outcome is
+  `needs-evidence`: name the check and owner. Do not promise the proposed reuse approach works.
+- If the owner says “summary” before Q3, record recommendation unconfirmed; not ready.
+- In Plan Mode/outside a repo, return the same proposed brief in the conversation without writes.
+- In headless mode, stop before this dialogue: example answers are not a live owner.

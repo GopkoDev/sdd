@@ -164,9 +164,10 @@ whole-change check a human reviewer would do; `ship` runs the feature for real.
 
 ### Utilities — call whenever you need them (not part of the line)
 
-- **interview** *(before roadmap / specify)* — gets the idea out of your head and onto disk: a
-  Socratic pass that writes the 8-section `docs/idea-brief.md`. Outside a git repo it stays
-  talk-only and writes nothing.
+- **interview** *(before roadmap / specify)* — gets the idea out of your head and onto disk: an
+  adaptive engineering interview with bounded fact-checking and risk-based critique. Writes the
+  8-section `docs/idea-brief.md` with decisions, evidence and readiness. Outside a repo or in Plan
+  Mode it stays talk-only; headless it stops before writes/helpers. `specify` reuses its answers.
 - **config** — the per-project settings file `.claude/sdd.local.md`: creates it with documented
   defaults, then walks six grouped questions and patches only the keys you confirm (your comments,
   key order and unknown keys survive untouched). The **only** skill that changes a setting — the six
@@ -187,8 +188,11 @@ The backbone builds one feature at a time. Three utilities carry what's above it
 
 **The idea, out of your head.** `interview` (optional) writes the 8-section `docs/idea-brief.md`
 (raw idea, problem, users, why now, out of scope, risks, recommendation, open questions).
-`specify` doesn't need it (it interviews you fresh if it's missing), but `roadmap` refuses to
-decompose without a source.
+`specify` reuses its accepted answers/evidence and asks only specification gaps; without a brief,
+it retains standalone discovery. `roadmap` refuses to decompose without a source. The interview
+can also end `needs-evidence`, `reframe`, or `stop` rather than force an unready idea downstream.
+Its saved/explicit depth is a ceiling (easy ≤4, medium ≤10, hard ≤15 questions), with no opening
+selector or minimum count. Research follows a decision-changing gap; critique follows risk.
 
 **The codebase, studied once.** `survey` persists `docs/architecture-map.md` — module layout,
 datastores, conventions, a C4 of what exists — so no later stage re-opens "what's the current
@@ -221,7 +225,8 @@ coverage (every spec §4 story + §5 AC traced end-to-end, `easy`/XS just asks f
 ### The settings file
 
 Six skills — `interview`, `survey`, `roadmap`, `scaffold`, `specify`, `implement` — **create**
-`.claude/sdd.local.md` as their first protocol step, so the file exists before anything needs it
+`.claude/sdd.local.md` after their entry gate (`interview` defers creation until its final
+writable brief step), so the file exists before downstream stages need it
 instead of surfacing three stages later. It's per-project, gitignored (the `.gitignore` patch is
 the only committed part), and self-documenting: every key carries its default and allowed values
 inline. **`/sdd:config` is the only thing that changes a value** — it creates the file first, so

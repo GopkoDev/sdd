@@ -18,7 +18,26 @@
 
 ---
 
-## How the level is chosen (every consuming skill, step 1)
+## Adaptive interview exception
+
+`interview` resolves a **ceiling**, not a mandatory interview length: explicit
+`--depth=easy|medium|hard` → saved `interview_depth` → `medium`. It announces the ceiling and
+starts from existing context, without a depth-selection question. Easy ≤4 substantive user
+questions; medium ≤10; hard ≤15. Count all questions seeking user decisions/facts, including
+identity clarification and final acceptance; reserve room for an unconfirmed consequential
+choice. There is no minimum. Reaching a ceiling means summarize actual readiness and blockers,
+not invent answers or automatically upgrade the budget. The owner may explicitly change it.
+
+Risk controls independent critique; a decision-changing factual gap controls research. Neither
+is switched on just because the ceiling is hard, nor switched off because it is easy. An
+adversarial request triggers critique, not an automatic increase of question count. At every
+level, label owner-reported/source-verified/assumption/unknown, and distinguish unconfirmed
+recommendations from owner decisions. No decide-for-user easy mode in `interview`.
+Its frontmatter `depth` stores the resolved ceiling even when the conversation ends earlier.
+
+The generic rules below apply to other consumers; this exception has precedence for `interview`.
+
+## How the level is chosen (other consuming skills, step 1)
 
 A consuming skill resolves the level once, at the top of its run, in this precedence (highest wins):
 
@@ -28,7 +47,7 @@ A consuming skill resolves the level once, at the top of its run, in this preced
    - **medium**.
    The user can always override per run — the saved default only pre-selects the recommendation; it never skips the question (unless `--depth=` was passed).
 
-`interview_depth` is a **plugin-wide** setting (documented with the rest in [`settings-file.md`](./settings-file.md)), not implement-only. The settings file is **created with documented defaults by the first of six skills to run** — `interview` / `survey` / `roadmap` / `scaffold` / `specify` / `implement`, each as its opening protocol step — so later Q&A skills read a real file; a reader that still finds it missing defaults the question to medium. There is **no hard dependency** on `implement` having run first (the create step is the same documented template wherever it fires), and the value is changed only by [`../config/SKILL.md`](../config/SKILL.md).
+`interview_depth` is a **plugin-wide** setting (documented with the rest in [`settings-file.md`](./settings-file.md)), not implement-only. The settings file is **created with documented defaults by the first of six skills to run** — `interview` / `survey` / `roadmap` / `scaffold` / `specify` / `implement` (`interview` defers creation until its final authorized write; the others create after their entry gate) — so later Q&A skills read a real file; a reader that still finds it missing defaults the question to medium. There is **no hard dependency** on `implement` having run first (the create step is the same documented template wherever it fires), and the value is changed only by [`../config/SKILL.md`](../config/SKILL.md).
 
 The opening question is also where the skill states what the level will *do* to this run («easy → I'll decide the reversible calls myself and list my assumptions; hard → I'll walk every decision and run the full analysis suite»), so the user picks with eyes open.
 
@@ -68,6 +87,8 @@ Depth tunes **how many questions** and **how much autonomy** — never **what ge
 - **`specify`** — the level gates step 3's ideation suite (table above) and the volume of the step-2 deep-dive + step-7 Socratic validation. The §5 coverage gates (≥1 of each of the 5 AC types **and ≥1 AC per §4 user story** — the use-case floor) are **floor, not dial** — enforced at every level.
 - **`clarify`** — the level gates how aggressively the self-sweep + `devils-advocate` hunt (easy: only build-divergence that changes behavior, with assumptions stated; hard: adversarial, every fork surfaced) and the per-finding question volume. Every surfaced ambiguity is still Resolved or Deferred at every level — none dangling.
 - **`design`** — the level gates the per-section Socratic question volume (easy: decide convention-defaults itself + ledger, ask only blast-radius decisions; hard: walk every decision, foreground each trade-off) and the C4 diagram confirmation (per [`diagram-presentation.md`](./diagram-presentation.md)). The blast-radius → ADR gate and the §11 owner+due rule are floors, enforced at every level.
-- **`interview`** (the pre-spec idea stress-test) — the level maps to a question budget + posture: **easy** → 3–4 questions (decide-for-you: one pass on intent, one sharp tradeoff, one angle); **medium** → 6–10 (balanced, full three phases); **hard** → 10–15 (interrogate-me: drill every assumption, run more probing frames). Inside a git repo it writes `docs/idea-brief.md` (8 sections); outside one it stays talk-only. Either way there is no assumptions ledger — the budget and posture are the whole delta.
+- **`interview`** — use the adaptive exception above: ceilings, targeted evidence, risk-based
+  critique, no opening selector, and no invented owner decisions. Its eight-section brief
+  separates structural completeness from readiness; repo/Plan Mode/headless write gates apply.
 
-A consuming skill adds a one-line pointer to this file at its depth-selection step and otherwise reads the level as a parameter into its existing loop — it does not re-implement the dial.
+A consuming skill adds a one-line pointer to this file at its depth-resolution step and otherwise reads the level as a parameter into its existing loop — it does not re-implement the dial.

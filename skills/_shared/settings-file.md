@@ -23,19 +23,19 @@
 
 | Role | Who | What they do with it |
 |---|---|---|
-| **Create** (unconditional, idempotent) | the six pipeline skills — `interview` · `survey` · `roadmap` · `scaffold` · `specify` · `implement` — **and `config` itself** | first protocol step: absent → write the template below + patch `.gitignore`; present → read, never overwrite. `interview` is subordinate to its own write gate — outside a git repo it writes nothing, settings included. |
+| **Create** (unconditional, idempotent) | the six pipeline skills — `interview` · `survey` · `roadmap` · `scaffold` · `specify` · `implement` — **and `config` itself** | first protocol step: absent → write the template below + patch `.gitignore`; present → read, never overwrite. `interview` defers creation to its final write point after real answers; outside a repo, in Plan Mode, or headless it writes nothing, settings included. |
 | **Change values** (the only writer of existing keys) | [`config`](../config/SKILL.md) | asks, then patches confirmed keys in place. No other skill ever offers to tune a value. |
-| **Read** `interview_depth` | `specify` · `clarify` · `design` · `sequences` · `ux-flows` | pre-selects the depth dial → [`interview-depth.md`](./interview-depth.md) |
+| **Read** `interview_depth` | `interview` · `specify` · `clarify` · `design` · `sequences` · `ux-flows` | question ceiling in `interview`; otherwise pre-selects the depth dial → [`interview-depth.md`](./interview-depth.md) |
 | **Read** `artifact_language` | every artifact-writing skill | the prose language of pipeline documents → [`artifact-language.md`](./artifact-language.md) |
 | **Read** `judgment_model` / `model_<role>` / `effort_<role>` | every skill that dispatches an agent | the tier each agent runs at → [`agent-roster.md`](./agent-roster.md) |
 | **Read** the engine keys (`tdd`, `team_mode`, `workflow_mode`, `max_parallel_agents`, `isolation`, `stop_on_red`, `max_red_retries`, `gate_*`, `require_integration`, `auto_commit`, `branch_strategy`, `cmd_*`) | `implement` (`cmd_*` + gates also `fix`) | → [`../implement/references/settings.md`](../implement/references/settings.md) |
 
 ## Create when absent (the procedure)
 
-Run this **first thing in the skill's protocol, after that skill's own gate** — `interview` resolves
-its write gate first (outside a repo it writes nothing), `scaffold` clears its hard refuse and
-`implement` its preconditions first, so a refusal leaves the repo untouched; the skills with no
-preceding gate simply run it first. It is unconditional — a settings file the user never asked for
+Run this **first thing in the skill's protocol, after that skill's own gate**, except `interview`,
+which reads settings first and creates them only at its final authorized brief-write point.
+`scaffold` clears its hard refuse and `implement` its preconditions first, so a refusal leaves
+the repo untouched; other skills with no preceding gate simply run it first. It is unconditional — a settings file the user never asked for
 is strictly better than a stage that discovers it is missing three commands later — and idempotent.
 
 1. **`.claude/sdd.local.md` exists?** → read it and stop here. **Never** overwrite, never
@@ -90,7 +90,7 @@ effort_reviewer: high
 
 ## What each key does
 
-- **`interview_depth`** — `easy | medium | hard`. The plugin-wide default for the **Q&A skills'** depth dial (`specify` / `clarify` / `design`), which governs how much each skill decides on its own vs. interrogates you (question volume, autonomy, which ideation analyses run, per-diagram confirm vs. proceed). It only **pre-selects** the recommended option in each skill's opening depth question — the user can still override per run, or pass `--depth=` to skip the question. It does **not** affect AC-completeness (that's a floor at every level). Full semantics → `skills/_shared/interview-depth.md`.
+- **`interview_depth`** — `easy | medium | hard`. The plugin-wide default for the **Q&A skills'** depth dial (`specify` / `clarify` / `design`), which governs how much each skill decides on its own vs. interrogates you (question volume, autonomy, which ideation analyses run, per-diagram confirm vs. proceed). It only **pre-selects** the recommended option in each skill's opening depth question — the user can still override per run, or pass `--depth=` to skip the question. It does **not** affect AC-completeness (that's a floor at every level). For `interview`, the same setting is a question ceiling without an opening selector; risk/research are independent (see its adaptive exception). Full semantics → `skills/_shared/interview-depth.md`.
 - **`artifact_language`** — `en | uk` (any language tag; default `en`). The language **pipeline documents** are written in — read by **every artifact-writing skill** (spec, SAD, ADRs, sequences, data-model, contracts, tasks, test plan, review/fix records, changelog, roadmap, CONTEXT.md). Only **prose** switches (paragraphs, table cells, diagram labels, the prose fields of `tasks.json` / `openapi.yaml`); **structure stays English** — section headings verbatim from the template, frontmatter keys+values, verdict literals, tracker states, Mermaid keywords, machine fields. Precedence when editing: an existing file's language wins over the setting, a new file matches its feature-folder neighbours, never retro-translate. Full rule + the never-translate token list → `skills/_shared/artifact-language.md`.
 - **`tdd`** — when false, RED is skipped and the engine writes code directly (warns; you lose the safety net).
 - **`team_mode` / `workflow_mode`** — feed the `implement` decision tree. `team_mode` wins when both could apply. Both need Claude Code (`TeamCreate` / `Workflow`); on Codex CLI and Cursor they degrade to sequential → `skills/_shared/tool-adapters.md`.

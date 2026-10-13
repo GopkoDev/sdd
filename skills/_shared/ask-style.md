@@ -17,6 +17,19 @@
 > glosses, same four mandatory elements per option. A missing native tool is **never** a reason to
 > skip a question, answer it for the user, or block the stage.
 
+## Interview exception — concise, adaptive questions
+
+For `interview` only, use one substantive question at a time, after reusing known answers.
+Ask facts/experience in open text without a recommended answer; the owner knows what happened.
+Use two to four meaningful choices for decisions, recommending one only with an evidence-based
+reason. Keep the question and tradeoffs concise for experienced engineers; explain unfamiliar
+terms or expand when needed. No mandatory 3–4 sentence question or 3–5 sentence descriptions.
+Never manufacture alternatives to fill a menu. User corrections update the live decision record.
+
+Use the native host question channel when available, including a free-text question if supported;
+otherwise ask in plain text and wait. No response is never consent. The exceptions here override
+this file's generic "no one-line descriptions" and mandatory-menu rules only for `interview`.
+
 ## The one rule that matters most
 
 **Never ask dryly.** The most common failure is a terse, jargon-dense question — a few words plus acronyms, no context — that forces the user to already know the project to answer. Fix it two ways, every time:

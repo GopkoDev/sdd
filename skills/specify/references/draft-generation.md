@@ -5,8 +5,8 @@ The authoritative format for each section is the `<!-- instruction -->` comment 
 ## Inputs in priority order
 
 1. **`CONTEXT.md` `## Glossary`** — canonical for role names + domain terms. If anything contradicts it, the glossary wins.
-2. **The interview** (step 2 capture + deep-dive) — the problem, the trigger, success criteria, constraints.
-3. **Ideation output** (step 3, when the depth dial runs it — medium/hard) — the chosen approach + its rationale → §1 ¶3.
+2. **The interview** — accepted decisions and relevant evidence from `docs/idea-brief.md`, plus current owner corrections and step-2 specification gaps, per [`brief-reuse.md`](./brief-reuse.md). Reuse the problem, trigger, outcome and constraints; preserve provenance and blockers.
+3. **Ideation output** — reused brief evidence/accepted direction or new step-3 gap work → §1 ¶3. Never require absent matrix cells or invent scores to satisfy the fresh-suite format.
 4. **Channel outputs** (step 5) — reference-module patterns, doc/MCP/KB quotes → §1 ¶4 traceability only.
 
 ## §5 acceptance-criteria contract

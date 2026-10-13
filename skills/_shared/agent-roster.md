@@ -15,8 +15,8 @@ Model is chosen by the **kind of work**, not by taste — judgment gets the stro
 | `implementer` | green + refactor + gate (execution) | `sonnet` | `medium` → `high` on escalation | + Write, Edit |
 | `reviewer` | independent review (judgment) | `opus` | `high` | Read, Grep, Glob, Bash |
 | `critic` | coherence critique (judgment) | `opus` | `high` | Read, Grep, Glob |
-| `devils-advocate` | ambiguity hunt (judgment) | `opus` | `high` | Read, Grep, Glob |
-| `researcher` | competitive / adjacent-solution research (ideation) | `sonnet` | `medium` | Read, Grep, Glob, WebSearch, WebFetch |
+| `devils-advocate` | ambiguity / failure / interview-risk critique | `opus` | `high` | Read, Grep, Glob |
+| `researcher` | competitive research / bounded fact-checking | `sonnet` | `medium` | Read, Grep, Glob, WebSearch, WebFetch |
 | `strategist` | generate the 3 strategic approaches (judgment) | `opus` | `high` | Read, Grep, Glob |
 | `analyst` | multi-perspective review of approaches (judgment) | `opus` | `high` | Read, Grep, Glob |
 | `pen-keeper` | reconcile the .pen library with the canon (execution) | `sonnet` | `medium` | Read, Grep, Glob, Bash, Pencil MCP |
