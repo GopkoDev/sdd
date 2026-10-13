@@ -21,23 +21,34 @@ const TASKS = /* [{id, title, acs, dod, files_hint, deps, layer, file}, ...] */;
 // as its brief (redPrompt/greenPrompt/verifyPrompt/reviewPrompt all carry t.file).
 
 // Kahn layers → phases; within a layer, fan out up to the parallel cap.
-// Each task is one independent pipeline: write-test → implement → verify → [review] → commit.
-const done = new Set();
+// Each task is one independent pipeline: write-test → implement → verify → [review]. NO commit
+// stage: stage agents never commit and never write status files (the script cannot touch disk).
+const blocked = new Set();
 for (const layer of kahnLayers(TASKS)) {              // computed from deps
-  await parallel(layer.map(t => () =>
+  const ready   = layer.filter(t => !t.deps.some(d => blocked.has(d)));
+  const skipped = layer.filter(t => !ready.includes(t))          // a dep is blocked → never starts
+                       .map(t => ({ id: t.id, res: null, reason: `dep ${t.deps.find(d => blocked.has(d))} blocked` }));
+  const results = await parallel(ready.map(t => () =>
     pipeline([t],
       () => agent(redPrompt(t),     { phase:'Implement', label:`red:${t.id}`,   schema: RED_VERDICT }),
       r  => agent(greenPrompt(t,r), { phase:'Implement', label:`green:${t.id}`, schema: GATE_VERDICT }),
       g  => agent(verifyPrompt(t,g),{ phase:'Implement', label:`verify:${t.id}`,schema: GATE_VERDICT }),
       v  => agent(reviewPrompt(t,v),{ phase:'Review',    label:`review:${t.id}`,schema: REVIEW_VERDICT }),
-    ).then(res => { if (res?.gate_green) done.add(t.id); return {t, res}; })
-  ))
+    ).then(res => ({ id: t.id, worktree: wt(t), res }))      // res === null → dropped
+  ));
+  // One serial writer per layer: status + step for every task, tracker.md / tasks.json rebuilt,
+  // the layer's green tasks committed one by one in dependency order. Cheap model — it is mechanical.
+  const closed = await agent(closeLayerPrompt(layer, [...results, ...skipped]), {
+    phase:'Implement', label:`close-layer:${layerIndex(layer)}`, model:'haiku', schema: CLOSE_VERDICT });
+  for (const b of closed.blocked) blocked.add(b.id);  // dropped + skipped → transitively blocked downstream
 }
 ```
 
 - **The brief is a path, not a paste.** Each generated prompt hands the agent `t.file` and tells it to read that first; the engine never inlines the task body into the prompt string. Upstream artifacts stay the fallback when a slice is insufficient — same order as everywhere else ([`./inputs.md`](./inputs.md)). A task with no `file` (an older breakdown) falls back to the JSON fields + spec §5, and the engine says so in the banner.
-- **Schema-validated verdicts.** Each stage returns a structured verdict (`RED_VERDICT { class: GOOD|BAD|false_pass|NON, failing_line }`, `GATE_VERDICT { unit, integration, lint, vet, gate_green }`, `REVIEW_VERDICT { ac_satisfied, issues[] }`) so the orchestrator branches on data, not prose.
-- **Fail drops the subtree.** A stage that throws (or returns `gate_green: false` past retries) drops that task to `null`; the engine removes it from `done`, so every transitively-dependent task is skipped (its deps never complete). Independent branches finish unaffected — this is the workflow's advantage over a team halt.
+- **Schema-validated verdicts.** Each stage returns a structured verdict (`RED_VERDICT { class: GOOD|BAD|false_pass|NON, failing_line }`, `GATE_VERDICT { unit, integration, lint, vet, gate_green }`, `REVIEW_VERDICT { ac_satisfied, issues[] }`, and per layer `CLOSE_VERDICT { committed[], blocked[] }`) so the orchestrator branches on data, not prose.
+- **Fail drops the subtree.** A stage that throws (or returns `gate_green: false` past retries) drops that task to `null`; `close-layer` records it `blocked` and returns it in `CLOSE_VERDICT.blocked`, so every transitively-dependent task is skipped. Independent branches finish unaffected — this is the workflow's advantage over a team halt.
+- **Which tree the stage agents work in.** `isolation: worktree` → the task's **first** stage (`red`) creates one worktree for the task, `git worktree add .worktrees/<slug>-<id> HEAD` (HEAD already holds every earlier layer's commits), and every later stage of that task (`green`, `verify`, `review`) is handed the same path and works only there. Do **not** pass `isolation: 'worktree'` to each `agent()` call — that gives every stage a fresh tree and the GREEN agent never sees the RED test. `isolation: inplace` forces `parallel = 1` (the decision-tree guard), so the stages work in the main checkout one task at a time.
+- **`close-layer` — the one writer.** Runs in the main checkout after the layer's `parallel()` returns, with the layer's collected verdicts (`RED_VERDICT`, `GATE_VERDICT`, `REVIEW_VERDICT` per task, or `null`). For each task, in dependency order: write `status` + `step` into its task file, `tasks/tracker.md` and `tasks.json` ([`tdd-loop.md`](./tdd-loop.md) §Status protocol — `done` for gate-green, `blocked` + reason otherwise, `blocked` / `dep T<n> blocked` for a skipped task; a failed commit → `blocked` / `COMMIT — <failure>`, never `done`); for a green task, apply its worktree diff (`git -C <worktree> diff --binary HEAD` + untracked files, `git apply --3way`) and commit the code paths **plus** the three status files with the `SDD-Task`/`SDD-AC` trailers via `git commit -- <paths>`; then remove the worktree. Returns `CLOSE_VERDICT { committed: [{id, sha}], blocked: [{id, reason}] }`. Status in this mode moves **per layer**, not per stage; the main session mirrors it into the native task list when it has one.
 - **Parallel cap.** `parallel(...)` respects `max_parallel_agents` (the workflow runtime also caps concurrency); a wide layer queues the overflow.
 
 ## Serialization inside the workflow
@@ -46,7 +57,7 @@ The same lanes as the team apply: `layer: migration` tasks are forced into a sin
 
 ## Commit + integration
 
-- Commits are produced by the `commit` step of each pipeline (or batched by the engine after the workflow returns, if `auto_commit: per_phase`), with `SDD-Task`/`SDD-AC` trailers, serialized in dependency order.
+- Commits are produced **only** by `close-layer`, serially in dependency order, with `SDD-Task`/`SDD-AC` trailers — never by a parallel pipeline stage (concurrent commits race on `.git/index.lock` and break the linear history). `auto_commit: per_phase` → `close-layer` makes one commit for the whole layer (every task's trailers); `off` never reaches this mode — the decision-tree guard downgrades it to sequential, because the next layer's worktrees start from a HEAD that only commits move.
 - Integration tier follows `require_integration`: in CI (Docker present) the integration RED→GREEN runs inside the verify stage; locally under `auto` with no Docker it's NON-red and the proving run relies on CI for the integration green.
 
 ## Graceful fallback

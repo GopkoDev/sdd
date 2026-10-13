@@ -346,7 +346,7 @@ def main() -> int:
     # new Claude-specific mechanism without a row there strands non-Claude users.
     print("== cross-tool mechanism coverage ==")
     adapters_text = (ROOT / "skills" / "_shared" / "tool-adapters.md").read_text()
-    MECHANISMS = ["AskUserQuestion", "TeamCreate", "Workflow", "subagent_type", "/clear"]
+    MECHANISMS = ["AskUserQuestion", "TeamCreate", "Workflow", "subagent_type", "/clear", "TaskCreate"]
     for mech in MECHANISMS:
         used_in = [s.parent.name for s in skill_specs if mech in s.read_text()]
         if not used_in:

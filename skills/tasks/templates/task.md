@@ -15,7 +15,9 @@ context_budget: "S"     # what the task costs the executing agent to hold (markd
                         # M = ≤120 inlined lines, 2–4 files in play
                         # L = beyond that — split the task, or keep it and say why right here:
                         #     context_budget: "L"   # justified: <one line>
-status: "todo"
+status: "todo"          # todo | in_progress | blocked | review | done — `implement` keeps it live
+step: ""                # SELECT | RED | GREEN | REFACTOR | GATE | REVIEW | COMMIT — markdown only;
+                        # for `blocked`, the reason: step: "GATE — lint red after 3 retries"
 ---
 
 <!-- The governing rule of this file: **inline the slice the task actually needs, name where it came

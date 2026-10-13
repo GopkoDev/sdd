@@ -18,7 +18,7 @@ Spawn each by its plugin-namespaced `subagent_type` — `sdd:test-author`, `sdd:
 
 ## Flow per task
 
-`test-author` (RED) → `implementer` (GREEN+REFACTOR+GATE) → `reviewer` (review). A task advances only when its `deps` are `done`. The lead pulls ready tasks off the DAG and assigns them; up to `max_parallel_agents` run at once.
+`test-author` (RED) → `implementer` (GREEN+REFACTOR+GATE) → `reviewer` (review). A task advances only when its `deps` are `done`. The lead pulls ready tasks off the DAG and assigns them; up to `max_parallel_agents` run at once. After **every** handover the lead writes the task's status + step to its task file, `tasks/tracker.md` and `tasks.json` — the lead is the only writer of those files; teammates never touch them ([`tdd-loop.md`](./tdd-loop.md) §Status protocol). When the session has `TaskCreate` / `TaskUpdate`, teammates may claim and complete the native tasks themselves; the lead mirrors the step into `activeForm` and fills any gap.
 
 ## Serialization lanes (the lead enforces)
 
@@ -32,7 +32,16 @@ Tasks in different lanes with satisfied deps run in parallel; tasks in the same 
 
 ## Commits
 
-The lead **serializes commits in dependency order** regardless of when the work finished — pull each agent's worktree changes for a `done` task and commit them on the feature branch with the `SDD-Task`/`SDD-AC` trailers ([`tdd-loop.md`](./tdd-loop.md)). The history is linear and bisectable even though the work was concurrent.
+The lead **serializes commits in dependency order** regardless of when the work finished, and makes each commit **itself** — teammates never commit to the feature branch. For a task that passed its gate (and review):
+
+1. Apply the teammate's worktree diff in the main checkout: `git -C .worktrees/<agent> diff --binary HEAD` (plus any untracked files the task created) applied with `git apply --3way`. A conflict means two lanes overlapped — stop and resolve it before anything else commits.
+2. Set the task to `done` / `COMMIT` in its task file, `tasks/tracker.md` and `tasks.json`.
+3. Commit the task's code paths **plus** those three status files in one commit, with the `SDD-Task`/`SDD-AC` trailers ([`tdd-loop.md`](./tdd-loop.md) §COMMIT), using `git commit -- <paths>`.
+4. Reset the teammate's worktree to the new feature-branch HEAD before it takes its next task.
+
+`auto_commit: per_phase` → the lead holds each `done` task's applied diff + status files in the main checkout and commits once per Kahn layer, when every task of that layer is `done` or `blocked` (one commit, every task's trailers); teammates' worktrees reset to that commit. (`off` never reaches this mode — the decision-tree guard downgrades it to sequential.)
+
+The history is linear and bisectable even though the work was concurrent.
 
 ## Don't over-orchestrate
 

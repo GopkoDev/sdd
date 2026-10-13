@@ -44,6 +44,7 @@ else:
 |---|---|
 | `team_mode: true` but `parallel_eligible` is false | Warn («team needs ≥2 parallel tasks and M+/≥4 tasks; this feature has <…>») and **downgrade** to the next applicable mode (workflow if eligible, else sequential). |
 | `max_parallel_agents > 1` and `isolation: inplace` | Clamp parallelism to 1 (two agents must never edit one working tree). Effectively sequential. |
+| `auto_commit: off` with team or workflow selected | Downgrade to **sequential** (warn). Both parallel modes advance by committing — a teammate's next worktree and the next Kahn layer start from the feature-branch HEAD; without commits HEAD never moves and later tasks can't see earlier code. |
 | `workflow_mode: off` | Never generate a Workflow, regardless of eligibility. |
 | `Workflow` tool not available at runtime | Skip the workflow branch; fall through to team (if eligible) or sequential. Graceful degrade — never error. |
 | `TeamCreate` not available at runtime | Skip the team branch; fall through to workflow or sequential. |

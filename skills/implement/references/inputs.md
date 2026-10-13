@@ -9,7 +9,7 @@
 The loaded `tasks.json` must satisfy the shape from the `tasks` skill:
 
 - top-level `{ slug, tasks: [...] }`.
-- each task: `id` (unique), `title`, `layer`, `deps` (array of existing ids), `acs` (array), `dod` (string), `files_hint` (array), `file` (repo-relative path to the task's markdown, `docs/features/<slug>/tasks/<task-slug>.md`).
+- each task: `id` (unique), `title`, `layer`, `deps` (array of existing ids), `acs` (array), `dod` (string), `files_hint` (array), `file` (repo-relative path to the task's markdown, `docs/features/<slug>/tasks/<task-slug>.md`). Optional: `status` (`todo | in_progress | blocked | review | done`; absent = `todo`, so an older breakdown still loads) — read for resume per [`./tdd-loop.md`](./tdd-loop.md) §Status protocol.
 - `file` must resolve to a file on disk. Missing key, or a path that doesn't exist → the breakdown predates the self-contained task format (or was hand-edited): say so, fall back to the JSON fields + the upstream artifacts below for that task, and note in the run banner that the agents are working without an inlined brief. (The `_scaffold` set below is exempt — it has no task markdown, and it is redirected out of this engine anyway.)
 - `deps` forms a DAG (no cycles) — verified in step 4. A cycle is a hard error: report the cycle and stop (it is a `tasks` bug, not an `implement` one).
 

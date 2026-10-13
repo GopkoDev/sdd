@@ -14,8 +14,8 @@ A test that stays red after a normal GREEN attempt is a signal, not a nuisance. 
 
 After the ladder is exhausted on a task:
 
-- **`stop_on_red: true`** (default) → halt the run. Report the blocked task, the failing line, and where in the ladder it stalled. Nothing half-done is committed.
-- **`stop_on_red: false`** → drop this task, **auto-block its transitive dependents** (their deps will never complete), and continue the independent branches. The final summary lists every dropped + blocked task with the reason.
+- **`stop_on_red: true`** (default) → set the task `blocked` with the step + reason in its task file, `tasks/tracker.md` and `tasks.json` ([`tdd-loop.md`](./tdd-loop.md) §Status protocol), then halt the run. Report the blocked task, the failing line, and where in the ladder it stalled. Nothing half-done is committed; the status files stay on disk for the next run's resume.
+- **`stop_on_red: false`** → drop this task, **auto-block its transitive dependents** (their deps will never complete) — each recorded `blocked` on disk with its reason — and continue the independent branches. The final summary lists every dropped + blocked task with the reason.
 
 ## Never
 

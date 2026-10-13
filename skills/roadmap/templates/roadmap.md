@@ -31,7 +31,7 @@ Source = the section of the idea-brief/PRD/canon that justifies the step (no anc
 Size ∈ XS | S | M | L | XL | fog. XS–XL per _shared/size-matrix.md; `fog` is not a size but its
 absence — the step nobody has formulated yet, so nothing about its shape is known. A `fog` row
 points its Step cell at the matching `## Not yet specified` area and gets no XS–XL anywhere.
-Status ∈ idea | spec'd | building | shipped — how far the BUILDING got; specify/ship keep it current.
+Status ∈ idea | spec'd | building | shipped — how far the BUILDING got; specify / implement / ship keep it current.
 Dependencies are NOT a column here: every edge lives in `## Dependency graph`, which is their one
 source of truth. In prose, call a step by its NAME («Import from CSV»), not by its bare id — the
 id is for the table and the graph, where something machine-readable has to point. -->
